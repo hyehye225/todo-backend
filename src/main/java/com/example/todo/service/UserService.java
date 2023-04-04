@@ -27,7 +27,7 @@ public UserEntity create(final UserEntity userEntity) {
 	return userRepository.save(userEntity);
 	
 }
-public UserEntity getByDredentials(final String email, final String password) {
+public UserEntity getByCredentials(final String email, final String password) {
 	return userRepository.findByEmailAndPassword(email,password);
 }
 }

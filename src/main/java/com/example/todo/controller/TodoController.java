@@ -42,7 +42,7 @@ public ResponseEntity<?>createTodo(@AuthenticationPrincipal String userId,@Reque
 		entity.setId(null);
 		entity.setUserId(userId);
 		
-		Optional<TodoEntity> entities=service.create(entity);
+		List<TodoEntity> entities=service.create(entity);
 		log.info("Log:service.create ok!");
 		
 		List<TodoDTO> dtos=entities.stream().map(TodoDTO::new).collect(Collectors.toList());
@@ -68,28 +68,28 @@ public ResponseEntity<?>retrieveTodo(@AuthenticationPrincipal String userId) {
 
 			return ResponseEntity.ok().body(response);
 }
-@GetMapping("/update")
-public ResponseEntity<?> update(@RequestBody TodoDTO dto) {
-	try {
-	TodoEntity entity=TodoDTO.toEntity(dto);
-	entity.setUserId("temporary-user");
-	Optional<TodoEntity> entities=service.update(entity);
-	List<TodoDTO> dtos=entities.stream().map(TodoDTO::new).collect(Collectors.toList());
-	ResponseDTO<TodoDTO> response=ResponseDTO.<TodoDTO>builder().data(dtos).build();
-	return ResponseEntity.ok().body(response);
-}catch (Exception e) {
-	String error=e.getMessage();
-	ResponseDTO<TodoDTO> response=ResponseDTO.<TodoDTO>builder().error(error).build();
-	return ResponseEntity.badRequest().body(response);
-}
-}
+//@GetMapping("/update")
+//public ResponseEntity<?> update(@RequestBody TodoDTO dto) {
+//	try {
+//	TodoEntity entity=TodoDTO.toEntity(dto);
+//	entity.setUserId("temporary-user");
+//	Optional<TodoEntity> entities=service.update(entity);
+//	List<TodoDTO> dtos=entities.stream().map(TodoDTO::new).collect(Collectors.toList());
+//	ResponseDTO<TodoDTO> response=ResponseDTO.<TodoDTO>builder().data(dtos).build();
+//	return ResponseEntity.ok().body(response);
+//}catch (Exception e) {
+//	String error=e.getMessage();
+//	ResponseDTO<TodoDTO> response=ResponseDTO.<TodoDTO>builder().error(error).build();
+//	return ResponseEntity.badRequest().body(response);
+//}
+//}
 @PutMapping
 public ResponseEntity<?> updateTodo(@AuthenticationPrincipal String userId,@RequestBody TodoDTO dto) {
 	try {
 	TodoEntity entity=TodoDTO.toEntity(dto);
 //	entity.setUserId("temporary-user");
 	entity.setUserId(userId);
-	Optional<TodoEntity> entities=service.updateTodo(entity);
+	List<TodoEntity> entities=service.update(entity);
 	List<TodoDTO> dtos=entities.stream().map(TodoDTO::new).collect(Collectors.toList());
 	ResponseDTO<TodoDTO> response=ResponseDTO.<TodoDTO>builder().data(dtos).build();
 	return ResponseEntity.ok().body(response);
@@ -111,7 +111,7 @@ public ResponseEntity<?> deleteTodo(@AuthenticationPrincipal String userId,@Requ
 //		String msg=service.delete(dto.getId());
 //		message.add(msg);
 		List<TodoDTO> dtos=entities.stream().map(TodoDTO::new).collect(Collectors.toList());
-		ResponseDTO<String> response=ResponseDTO.<String>builder().data(dtos).build();
+		ResponseDTO<TodoDTO> response=ResponseDTO.<TodoDTO>builder().data(dtos).build();
 //		ResponseDTO<String> response=ResponseDTO.<String>builder().data(message).build();
 		return ResponseEntity.ok().body(response); 
 	}catch (Exception e) {
