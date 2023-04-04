@@ -40,6 +40,7 @@ public ResponseEntity<?>createTodo(@RequestBody TodoDTO dto) {
 		
 		List<TodoDTO> dtos=entities.stream().map(TodoDTO::new).collect(Collectors.toList());
 		log.info("Log:entities=> dtos ok!");
+		
 		ResponseDTO<TodoDTO> response=ResponseDTO.<TodoDTO>builder().data(dtos).build();
 		log.info("Log:responsedto ok!");
 		return ResponseEntity.ok().body(response);}catch(Exception e) {
