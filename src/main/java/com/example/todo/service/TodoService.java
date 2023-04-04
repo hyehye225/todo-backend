@@ -1,5 +1,6 @@
 package com.example.todo.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public Optional<TodoEntity> create(final TodoEntity entity) {
 	validate(entity);
 	repository.save(entity);
 	return repository.findById(entity.getId());
+}
+public List<TodoEntity>retrieve(final String userId) {
+	return repository.findByUserId(userId);
 }
 public void validate(final TodoEntity entity) {
 	if(entity==null) {
