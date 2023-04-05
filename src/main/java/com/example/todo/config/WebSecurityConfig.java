@@ -44,10 +44,15 @@
 //}
 package com.example.todo.config;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.web.filter.CorsFilter;
 
+import java.time.LocalDateTime;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.h2.util.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -55,12 +60,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.web.filter.CorsFilter;
+
 
 import com.example.todo.security.JwtAuthenticationFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Configuration
@@ -94,6 +101,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                .antMatchers("/","/auth/**","/h2-console/**").permitAll()
                .anyRequest()
                .authenticated();
+//           .and()
+//           .headers().frameOptions().disable();
 
        http.exceptionHandling()
        .authenticationEntryPoint((request, response, e) ->
