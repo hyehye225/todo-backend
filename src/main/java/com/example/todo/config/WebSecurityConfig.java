@@ -100,9 +100,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
            .authorizeRequests()
                .antMatchers("/","/auth/**","/h2-console/**").permitAll()
                .anyRequest()
-               .authenticated();
-//           .and()
-//           .headers().frameOptions().disable();
+               .authenticated()
+           .and()
+           .headers().frameOptions().disable();
 
        http.exceptionHandling()
        .authenticationEntryPoint((request, response, e) ->
