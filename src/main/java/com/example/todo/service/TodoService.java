@@ -20,14 +20,14 @@ private TodoRepository repository;
 public List<TodoEntity> create(final TodoEntity entity) {
 	validate(entity);
 	repository.save(entity);
-	return repository.findByUserId(entity.getId());
+	return repository.findByUserId(entity.getUserId());
 }
 public List<TodoEntity>retrieve(final String userId) {
 	return repository.findByUserId(userId);
 }
 public List<TodoEntity>update(final TodoEntity entity) {
 	validate(entity);
-	if(repository.existsById(entity.getId())) {
+	if(repository.existsById(entity.getUserId())) {
 		repository.save(entity);
 	}
 	else throw new RuntimeException("Unknown id");
