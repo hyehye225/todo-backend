@@ -27,12 +27,12 @@ public List<TodoEntity>retrieve(final String userId) {
 }
 public List<TodoEntity>update(final TodoEntity entity) {
 	validate(entity);
-	if(repository.existsById(entity.getUserId())) {
+	if(repository.existsById(entity.getId())) {
 		repository.save(entity);
 	}
 	else throw new RuntimeException("Unknown id");
 	
-	return repository.findByUserId(entity.getId());
+	return repository.findByUserId(entity.getUserId());
 }
 //public List<TodoEntity>updateTodo(final TodoEntity entity) {
 //	validate(entity);
