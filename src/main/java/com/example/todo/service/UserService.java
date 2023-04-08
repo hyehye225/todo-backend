@@ -33,10 +33,13 @@
 //}
 package com.example.todo.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.todo.model.TodoEntity;
 import com.example.todo.model.UserEntity;
 import com.example.todo.persistence.UserRepository;
 
@@ -59,6 +62,20 @@ public class UserService {
 		}
 		
 		return userRepository.save(userEntity);
+	}
+	public UserEntity retrieve(final String email) {
+		return userRepository.findByEmail(email);
+	}
+	public UserEntity update(final UserEntity userEntity) {
+		
+		
+//		validate(userEntity);
+		if(userRepository.existsByEmail(userEntity.getEmail())) {
+			userRepository.save(userEntity);
+		}
+		else throw new RuntimeException("Unknown email");
+		
+		return userRepository.findByEmail(userEntity.getEmail());
 	}
 	public UserEntity getByCredentials(final String email, final String password,final PasswordEncoder encoder) {
 		final UserEntity originalUser=userRepository.findByEmail(email);

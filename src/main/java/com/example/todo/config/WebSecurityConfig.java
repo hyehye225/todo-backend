@@ -44,13 +44,12 @@
 //}
 package com.example.todo.config;
 
-import org.springframework.web.filter.CorsFilter;
-
-import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.h2.util.json.JSONObject;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -60,13 +59,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-
+import org.springframework.web.filter.CorsFilter;
 
 import com.example.todo.security.JwtAuthenticationFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -77,7 +73,10 @@ import lombok.extern.slf4j.Slf4j;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
    private final ObjectMapper objectMapper;
-   
+   @Bean
+   public ModelMapper modelMapper() {
+       return new ModelMapper();
+   }
    @Autowired
    public WebSecurityConfig(ObjectMapper objectMapper) {
        this.objectMapper = objectMapper;

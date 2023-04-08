@@ -67,15 +67,16 @@
 //
 //}
 package com.example.todo.controller;
-
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.todo.dto.ResponseDTO;
@@ -92,12 +93,33 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController {
 	@Autowired
 	private UserService userService;
-	
+	@Autowired
+	  ModelMapper modelMapper;
 	@Autowired
 	private TokenProvider tokenProvider;
 	
 	private PasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
-	
+//	@PostMapping("/profile")
+//	public ResponseEntity<?>userInfo(@RequestBody UserDTO userDTO){
+//		try {
+//			UserEntity user = UserEntity.builder()
+//					.email(userDTO.getEmail())
+//					.username(userDTO.getUsername())
+//					.password(passwordEncoder.encode(userDTO.getPassword()))
+//					.build();
+//			
+//			UserEntity registeredUser = userService.create(user);
+//			UserDTO responseUserDTO = userDTO.builder()
+//					.email(registeredUser.getEmail())
+//					.id(registeredUser.getId())
+//					.username(registeredUser.getUsername())
+//					.build();
+//			return ResponseEntity.ok().body(responseUserDTO);
+//		}catch(Exception e){
+//			ResponseDTO responseDTO = ResponseDTO.builder().error(e.getMessage()).build();
+//			return ResponseEntity.badRequest().body(responseDTO);
+//		}
+//	}
 	@PostMapping("/signup")
 	public ResponseEntity<?>registerUser(@RequestBody UserDTO userDTO){
 		try {
@@ -119,7 +141,26 @@ public class UserController {
 			return ResponseEntity.badRequest().body(responseDTO);
 		}
 	}
+	@GetMapping("/profile")
+	public ResponseEntity<?>retrieveUser(@RequestParam String email){
+		try {UserEntity entity=userService.retrieve(email);
+		System.out.println(entity);
+		UserDTO dto=modelMapper.map(entity, UserDTO.class);
+		System.out.println(dto);
+//		ResponseDTO<UserDTO> response=ResponseDTO.<UserDTO>builder().build();
+		UserDTO response = dto.builder()
+				.email(dto.getEmail())
+				.id(dto.getId())
+				.username(dto.getUsername())
+				.password(dto.getPassword())
+				.build();
+		System.out.println(response);
 
+				return ResponseEntity.ok().body(response);}catch(Exception e){
+					ResponseDTO responseDTO = ResponseDTO.builder().error(e.getMessage()).build();
+					return ResponseEntity.badRequest().body(responseDTO);
+				}
+	}
 	@PostMapping("/signin")
 	public ResponseEntity<?>authenticate(@RequestBody UserDTO userDTO){
 		UserEntity user = userService.getByCredentials(userDTO.getEmail(), userDTO.getPassword(),passwordEncoder);
